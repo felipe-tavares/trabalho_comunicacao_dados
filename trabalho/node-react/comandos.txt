@@ -1,0 +1,32 @@
+COMMANDS
+npm install --global yarn
+npm install
+npm install react
+npm install react-dom
+npm install react-sripts
+npm install react-native
+npm install react-native-web
+npm install react-art
+npm install react-router-native
+npm install react-router-dom
+npm install 
+npm install --save @react-native-community/masked-view
+npm install react-native-safe-area-context
+npm install
+npm audit fix
+yarn add react-navigation
+yarn add react-native-screens
+yarn add react-navigation-stack
+yarn add react-native-gesture-handler
+react-native link react-native-gesture-handler
+npm install --save-dev babel-core
+npm install --save-dev @babel/preset-flow
+npm install --save-dev @babel/preset-typescript
+npm install --save-dev @babel/plugin-transform-flow-strip-types
+npm install @react-navigation/native @react-navigation/stack
+npm install react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view
+
+npm install
+npm run dev
+
+(caso erro de cache: npm rebuild)
