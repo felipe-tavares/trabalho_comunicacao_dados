@@ -1,4 +1,5 @@
 COMMANDS
+create-react-app node-react
 npm install --global yarn
 npm install
 npm install react

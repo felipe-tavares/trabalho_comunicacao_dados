@@ -13,7 +13,7 @@ export default function App() {
         <Stack.Screen
           name="Screen1"
           component={Screen1}
-          options={{ title: 'Welcome' }}
+          options={{ title: 'Welcome to screen 1' }}
         />
         <Stack.Screen
 			name="Screen2"

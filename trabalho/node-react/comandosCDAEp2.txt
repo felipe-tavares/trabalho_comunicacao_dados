@@ -1,0 +1,20 @@
+following from https://www.youtube.com/watch?v=FvIwjahx7ck&feature=youtu.be
+react-native init nomedoprojeto
+react-native run-android
+react-native start
+
+is ok? https://reactnative.dev/docs/running-on-device
+
+export ANDROID_HOME=$HOME/library/Android/sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+
+yarn add react-native-bluetooth-serial
+react-native link react-native-bluetooth-serial
+
+faz imports e monta tela... (App.js)
+
+abrir arquivo node_modules/react-native-bluetooth-serial/android/src/main/java/com/rusel/RCTBluetoothSerial/RCTBluetoothSerialPackage.java
+excluir/comentar segundo @Override e salvar
