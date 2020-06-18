@@ -1,0 +1,50 @@
+info Running jetifier to migrate libraries to AndroidX. You can disable it using "--no-jetifier" flag.
+Jetifier found 1681 file(s) to forward-jetify. Using 4 workers...
+info JS server already running.
+info Launching emulator...
+info Installing the app...
+
+> Configure project :react-native-bluetooth-serial
+WARNING: The following project options are deprecated and have been removed: 
+android.useDeprecatedNdk
+NdkCompile is no longer supported
+
+
+WARNING: Configuration 'compile' is obsolete and has been replaced with 'implementation' and 'api'.
+It will be removed soon. For more information see: http://d.android.com/r/tools/update-dependency-configurations.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 7.0.
+Use '--warning-mode all' to show the individual deprecation warnings.
+See https://docs.gradle.org/6.0.1/userguide/command_line_interface.html#sec:command_line_warnings
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Task 'installDebug' not found in project ':app'.
+
+* Try:
+Run gradlew tasks to get a list of available tasks. Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output. Run with --scan to get full insights.
+
+* Get more help at https://help.gradle.org
+
+BUILD FAILED in 6s
+
+Error: Command failed: gradlew.bat app:installDebug -PreactNativeDevServerPort=8081
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Task 'installDebug' not found in project ':app'.
+
+* Try:
+Run gradlew tasks to get a list of available tasks. Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output. Run with --scan to get full insights.
+
+* Get more help at https://help.gradle.org
+
+BUILD FAILED in 6s
+
+    at makeError (C:\Users\samuk_000\trabalho_comunicacao_dados-master\trabalho\node_reactnative_bt\node_modules\execa\index.js:174:9)
+    at C:\Users\samuk_000\trabalho_comunicacao_dados-master\trabalho\node_reactnative_bt\node_modules\execa\index.js:278:16
+    at processTicksAndRejections (internal/process/task_queues.js:97:5)
+    at async runOnAllDevices (C:\Users\samuk_000\trabalho_comunicacao_dados-master\trabalho\node_reactnative_bt\node_modules\@react-native-community\cli-platform-android\build\commands\runAndroid\runOnAllDevices.js:94:5)
+    at async Command.handleAction (C:\Users\samuk_000\trabalho_comunicacao_dados-master\trabalho\node_reactnative_bt\node_modules\@react-native-community\cli\build\index.js:186:9)

@@ -28,7 +28,7 @@ react-native link react-native-bluetooth-serial
 faz imports e monta tela... (App.js)
 
 abrir arquivo node_modules/react-native-bluetooth-serial/android/src/main/java/com/rusel/RCTBluetoothSerial/RCTBluetoothSerialPackage.java
-excluir/comentar segundo @Override e salvar
+excluir/comentar segundo @Override e salvar (repetir caso erro)
 
 atualizar o App.js com programa do mada
 

@@ -1,0 +1,7 @@
+info Running jetifier to migrate libraries to AndroidX. You can disable it using "--no-jetifier" flag.
+Error: Command failed: C:\Users\samuk_000\trabalho_comunicacao_dados-master\trabalho\node_reactnative_bt\node_modules\jetifier\bin\jetify
+    at makeError (C:\Users\samuk_000\trabalho_comunicacao_dados-master\trabalho\node_reactnative_bt\node_modules\execa\index.js:174:9)
+    at C:\Users\samuk_000\trabalho_comunicacao_dados-master\trabalho\node_reactnative_bt\node_modules\execa\index.js:278:16
+    at processTicksAndRejections (internal/process/task_queues.js:97:5)
+    at async Object.runAndroid [as func] (C:\Users\samuk_000\trabalho_comunicacao_dados-master\trabalho\node_reactnative_bt\node_modules\@react-native-community\cli-platform-android\build\commands\runAndroid\index.js:115:7)
+    at async Command.handleAction (C:\Users\samuk_000\trabalho_comunicacao_dados-master\trabalho\node_reactnative_bt\node_modules\@react-native-community\cli\build\index.js:186:9)
