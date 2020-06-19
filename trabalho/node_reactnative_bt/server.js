@@ -2,8 +2,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.RCT_METRO_PORT || http://192.168.0.106:5000; //caso erro deixar só 5000
+//obs: usar seu ip...
 
+//PORT
 var minimum = 1;
 var maximum = 20;
 var sortimum = 0;

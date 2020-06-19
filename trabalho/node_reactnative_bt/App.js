@@ -1,6 +1,10 @@
 /*OQ ESSE PROJETO DEVE FAZER?
-ler valores do pulso, quando clicar no botão send, enviar um desses valores para o max
-ao clicar no botao sort, vai ser sorteado um valor, mostrado na tela, e vai ascender o led
+ler valores do pulso, quando clicar no botão send,
+se o pulso for valido, ascender led builtin e enviar inputs min e max ao servidor,
+se o pulso for invalido, apagar led builtin e enviar inputs min e max ao servidor,
+ao clicar no botao sort, vai ser sorteado um valor, que será mostrado na tela,
+se o pulso estiver como validado (built in ligado), vai ascender led vermelho,
+caso contrario, os leds se manterão apagados
 */
 
 import React from 'react';
@@ -34,24 +38,32 @@ export default class App extends React.Component {
 			unpairedDevices: [],
 			connected: false,
             max: '',
-            response: '',
             post: '',
             result: '',
 			data: '',
+			responseToPost: '',
 		}
 	}
 	
+	onChangeHandler(field, value) {
+        this.setState({ [field]: value });
+    }
+	
+	//sort is now working!
+	//obs: change fetch to your default ip address
 	callApiSort = async () => {
-        const result = await fetch('/api/sort');
+        const result = await fetch('http://192.168.0.106:5000/api/sort');
         const body = await result.json();
         if (result.status !== 200) throw Error(body.message);
 
         return body;
     };
 	
-	handleTimbus = async f => {//envia valor max ao server
-        f.preventDefault();
-        const response = await fetch('/api/num2', {
+	//post max is now working!
+	//obs: change fetch to your default ip address
+	handleTimbus = async () => {//sent value max to server
+        
+        const response = await fetch('http://192.168.0.106:5000/api/num2', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -60,7 +72,8 @@ export default class App extends React.Component {
         });
         const body = await response.text();
 
-        this.setState({ max: body });
+        this.setState({ responseToPost: body });
+		return body;
     };
 	
 	componentDidMount() {
@@ -128,45 +141,34 @@ export default class App extends React.Component {
 		}
 	}
 	
-	activeGreenLed() {//receber valor do arduino e enviar ao max do servidor
-		BluetoothSerial.write("0")//ativa o teste de pulso
+	activeGreenLed() {//test heartbeat then send min and max to server
+		
+		BluetoothSerial.write("0")//enable heartbeat test
 		.then((res) => {
 			console.log(res);
 			console.log('Successfuly wrote to device')
 			this.setState({ connected: true })
-			//nenhuma funcionou :(
-			/*BluetoothSerial.on('read', data => { //esse aki existe mas n sei sobre o 'read'
-				console.log(`DATA FROM BLUETOOTH: ${data.data}`);
-				ToastAndroid.show('received data from device: ${data.data}', ToastAndroid.SHORT);
-			});/*
-			BluetoothSerial.read((data, subscription) => {//esse aki n existe mas da pra testar
-				console.log(data);
-				ToastAndroid.show('received data from device: ${data.data}', ToastAndroid.SHORT);
-			},);*/
-			this.handleTimbus;
+			
+			this.handleTimbus()
+			.then(res => this.setState({ responseToPost: res.express }))
+			.catch(err => console.log(err))
 		})
 		.catch((err) => console.log(err.message))
+		
 	}
 	
-	activeRedLed() {//recebe valor do server, printa esse valor, e avisa ao embarcado
-		//callApiSort() 
-		this.callApiSort() 
+	activeRedLed() {//receive value from server, print this value, then notify embedded system
+		this.callApiSort()
 		.then(res => this.setState({ result: res.express }))
 		.catch(err => console.log(err))
 		
-		BluetoothSerial.write("1")//ascende red led
+		BluetoothSerial.write("1")//turn on red led
 		.then((res) => {
 			console.log(res);
 			console.log('Successfuly wrote to device')
 			this.setState({ connected: true })
 		})
 		.catch((err) => console.log(err.message))
-		
-		return (
-			<View>
-				<Text style={{ color: 'red', fontSize: 20 }} >{this.state.result}</Text>
-			</View>
-		)
 	}
 	
 	connect(device) {
@@ -220,34 +222,33 @@ export default class App extends React.Component {
 				
 				<View style={styles.container} />
 				
-				
-				
 				<TextInput
 					style={styles.inputs}
-					placeholder="Your best lucky"
+					placeholder="input max value"
 					type="text"
 					value={this.state.max}
-					onChange={f => this.setState({ max: f.target.value })}
+					onChangeText={value => this.onChangeHandler('max', value)}
 				/>
+				
 				<View style={styles.container} />
 				
-				<TextInput
-					style={styles.inputs}
-					placeholder="what you've got"
-					type="text"
-					value={this.state.result}
-					onChange={e => this.setState({ result: e.target.value })}
-				/>
+				<View>
+					<Text style={{ color: 'red', fontSize: 20 }} >{this.state.responseToPost}</Text>
+				</View>
+				
+				<View>
+					<Text style={{ color: 'red', fontSize: 20 }} >{this.state.result}</Text>
+				</View>
 				
 				<Button
 				onPress={this.activeGreenLed.bind(this)}
-				title="Send SORTe"
+				title="Send SORT"
 				color="#287731"
 				/>
 				
 				<Button
 				onPress={this.activeRedLed.bind(this)}
-				title="SORTear"
+				title="SORT"
 				color="#aa3443"
 				/>
 			</View>
@@ -263,7 +264,7 @@ const styles = StyleSheet.create({
 	  paddingBottom: 10,
   },
   inputs: {
-	paddingLeft: 85,
+	paddingLeft: 160,
 	fontSize: 25,
 	color: "red"
   },
@@ -291,8 +292,4 @@ const styles = StyleSheet.create({
 	  margin: 10,
 	  borderBottomWidth: 1
   },
-  btn: {
-        paddingTop: 20,
-        fontSize: 11,
-  }
 });

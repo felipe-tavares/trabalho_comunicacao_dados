@@ -8,7 +8,7 @@ DFRobot_Heartrate heartrate(DIGITAL_MODE);
 
 SoftwareSerial bluetooth(2, 3); //TX, RX
 const int ledVermelho = 10;
-const int ledVerde = 13;
+const int ledOrange = 13;
 
 void setup() {
   Serial.begin(9600);
@@ -16,15 +16,15 @@ void setup() {
 
   //Polarizacao invertida...
   pinMode(ledVermelho, OUTPUT);
-  pinMode(ledVerde, OUTPUT);
+  pinMode(ledOrange, OUTPUT);
 
-  digitalWrite(10, 1);
-  digitalWrite(ledVerde, 1);
+  digitalWrite(ledVermelho, 0);
+  digitalWrite(ledOrange, 0);
 
   bluetooth.begin(9600);
 }
 
-void loop() {
+void loop() {//pra testar sem sensor, atribuir 1 ao rateValue e comentar as outras duas linhas logo a frente
   uint8_t rateValue;
   heartrate.getValue(heartratePin); ///< A1 foot sampled values
   rateValue = heartrate.getRate(); ///< Get heart rate value 
@@ -41,19 +41,21 @@ void loop() {
 
     if (r == '0') {//primeiro botao (send pulso)
       Serial.println("Enviando sua SORTe...");
+      digitalWrite(ledVermelho, 0);
       if(rateValue)
       {
-        digitalWrite(ledVermelho, 0);
-        digitalWrite(ledVerde, 0);
-        bluetooth.write(rateValue);
+        digitalWrite(ledOrange, 1); //pulso valido
+        //bluetooth.write(rateValue); n tem read :(
         Serial.println("Sorte enviada! analisando...");
-      }else{
+      }else{//pulso invalido
         Serial.println("Sem sorte... Tente novamente!");
-        digitalWrite(ledVerde, 1);
+        digitalWrite(ledOrange, 0); //pulso invalido
       }
     } else if (r == '1') {//segundo botao (ascende led vermelho)
-      Serial.println("SORTe recebida!");
-      digitalWrite(ledVermelho, 1);
+      if(digitalRead(ledOrange)){
+        Serial.println("SORTe recebida!");
+        digitalWrite(ledVermelho, 1);
+      }
     }
   }
 
