@@ -5,8 +5,13 @@
   "scripts": {
     "client": "react-native run-android",
     "server": "node server.js",
-    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+	"start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
+  "proxy": "http://localhost:5000/",
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/native": "^5.5.1",

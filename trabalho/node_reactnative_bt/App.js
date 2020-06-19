@@ -1,6 +1,12 @@
+/*OQ ESSE PROJETO DEVE FAZER?
+ler valores do pulso, quando clicar no botão send, enviar um desses valores para o max
+ao clicar no botao sort, vai ser sorteado um valor, mostrado na tela, e vai ascender o led
+*/
+
 import React from 'react';
 
 import {
+  ActivityIndicator,
   SafeAreaView,
   Button,
   FlatList,
@@ -11,11 +17,11 @@ import {
   ScrollView,
   View,
   Text,
-  StatusBar
+  StatusBar,
+  TextInput,
 } from 'react-native';
 
 import BluetoothSerial from 'react-native-bluetooth-serial'
-
 
 export default class App extends React.Component {
 	constructor (props) {
@@ -27,10 +33,37 @@ export default class App extends React.Component {
 			devices: [],
 			unpairedDevices: [],
 			connected: false,
+            max: '',
+            response: '',
+            post: '',
+            result: '',
+			data: '',
 		}
 	}
 	
-	componentDidMount() { //usar DidMount caso de problema aqui
+	callApiSort = async () => {
+        const result = await fetch('/api/sort');
+        const body = await result.json();
+        if (result.status !== 200) throw Error(body.message);
+
+        return body;
+    };
+	
+	handleTimbus = async f => {//envia valor max ao server
+        f.preventDefault();
+        const response = await fetch('/api/num2', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ post: this.state.max }),
+        });
+        const body = await response.text();
+
+        this.setState({ max: body });
+    };
+	
+	componentDidMount() {
 		Promise.all([
 			BluetoothSerial.isEnabled(),
 			BluetoothSerial.list()
@@ -95,24 +128,45 @@ export default class App extends React.Component {
 		}
 	}
 	
-	activeGreenLed() {
-		BluetoothSerial.write("0")
+	activeGreenLed() {//receber valor do arduino e enviar ao max do servidor
+		BluetoothSerial.write("0")//ativa o teste de pulso
 		.then((res) => {
 			console.log(res);
 			console.log('Successfuly wrote to device')
 			this.setState({ connected: true })
+			//nenhuma funcionou :(
+			/*BluetoothSerial.on('read', data => { //esse aki existe mas n sei sobre o 'read'
+				console.log(`DATA FROM BLUETOOTH: ${data.data}`);
+				ToastAndroid.show('received data from device: ${data.data}', ToastAndroid.SHORT);
+			});/*
+			BluetoothSerial.read((data, subscription) => {//esse aki n existe mas da pra testar
+				console.log(data);
+				ToastAndroid.show('received data from device: ${data.data}', ToastAndroid.SHORT);
+			},);*/
+			this.handleTimbus;
 		})
 		.catch((err) => console.log(err.message))
 	}
 	
-	activeRedLed() {
-		BluetoothSerial.write("1")
+	activeRedLed() {//recebe valor do server, printa esse valor, e avisa ao embarcado
+		//callApiSort() 
+		this.callApiSort() 
+		.then(res => this.setState({ result: res.express }))
+		.catch(err => console.log(err))
+		
+		BluetoothSerial.write("1")//ascende red led
 		.then((res) => {
 			console.log(res);
 			console.log('Successfuly wrote to device')
 			this.setState({ connected: true })
 		})
 		.catch((err) => console.log(err.message))
+		
+		return (
+			<View>
+				<Text style={{ color: 'red', fontSize: 20 }} >{this.state.result}</Text>
+			</View>
+		)
 	}
 	
 	connect(device) {
@@ -164,15 +218,36 @@ export default class App extends React.Component {
 				renderItem={(item) => this.renderDevices(item)}
 				/>
 				
+				<View style={styles.container} />
+				
+				
+				
+				<TextInput
+					style={styles.inputs}
+					placeholder="Your best lucky"
+					type="text"
+					value={this.state.max}
+					onChange={f => this.setState({ max: f.target.value })}
+				/>
+				<View style={styles.container} />
+				
+				<TextInput
+					style={styles.inputs}
+					placeholder="what you've got"
+					type="text"
+					value={this.state.result}
+					onChange={e => this.setState({ result: e.target.value })}
+				/>
+				
 				<Button
 				onPress={this.activeGreenLed.bind(this)}
-				title="Green"
+				title="Send SORTe"
 				color="#287731"
 				/>
 				
 				<Button
 				onPress={this.activeRedLed.bind(this)}
-				title="Red"
+				title="SORTear"
 				color="#aa3443"
 				/>
 			</View>
@@ -185,6 +260,12 @@ const styles = StyleSheet.create({
   container: {
 	  flex: 1,
 	  backgroundColor: '#F5FCFF',
+	  paddingBottom: 10,
+  },
+  inputs: {
+	paddingLeft: 85,
+	fontSize: 25,
+	color: "red"
   },
   toolbar: {
 	  paddingTop: 30,
@@ -209,5 +290,9 @@ const styles = StyleSheet.create({
   deviceNameWrap: {
 	  margin: 10,
 	  borderBottomWidth: 1
+  },
+  btn: {
+        paddingTop: 20,
+        fontSize: 11,
   }
 });

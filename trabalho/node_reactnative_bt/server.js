@@ -24,11 +24,7 @@ function convertObjToNum(obj) {
     return c;
 }
 
-app.get('/api/mensagem', (req, res) => {
-  res.send({ express: 'And a hello from express RESTful API!' });
-});
-
-app.get('/api/sort', (req, res) => {//DESCOMENTAR ABAIXO...
+app.get('/api/sort', (req, res) => {//ao ser chamado, retorna sorteio
     sortimum = getRandomIntInclusive(minimum, maximum);
     console.log(sortimum);
     res.send(
@@ -36,16 +32,7 @@ app.get('/api/sort', (req, res) => {//DESCOMENTAR ABAIXO...
     );
 });
 
-app.post('/api/num1', (req, res) => {
-    minimum = convertObjToNum(req.body);
-    console.log(typeof minimum);
-    console.log(minimum);
-    res.send(
-        `I received your POST request. This is what you sent me: ${minimum}`,
-    );
-});
-
-app.post('/api/num2', (req, res) => {
+app.post('/api/num2', (req, res) => {//ao ser chamado, armazena max
     maximum = convertObjToNum(req.body);
     console.log(typeof maximum);
     console.log(maximum);
