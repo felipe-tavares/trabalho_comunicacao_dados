@@ -264,7 +264,8 @@ const styles = StyleSheet.create({
 	  paddingBottom: 10,
   },
   inputs: {
-	paddingLeft: 160,
+	textAlign:'center',
+	//paddingLeft: 160,
 	fontSize: 25,
 	color: "red"
   },
